@@ -26,5 +26,5 @@ class ActionPrediction:
         
         model = ModelFactory.buildDefaultActionModel(imageDir, trueData)
         return model.run()
-    
+     
     

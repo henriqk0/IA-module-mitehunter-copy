@@ -5,6 +5,7 @@ from .scripts.io.LoadModel import LoadModel
 from .scripts.io.ResultsSaver import ResultsSaverInText
 from .UltralitcsAIRunConfiguration import UtralitcsAIRunConfiguration
 from mitehunter.settings.default import IA_DIR
+from .AsahiAIAdapter import AsahiAIAdapter
 
 
 class UltralitcsAIAdapterFactory:
@@ -22,13 +23,15 @@ class UltralitcsAIAdapterFactory:
         Returns:
             UtralitcsAIAdapter: instância do melhor adaptador da ultralitycs.
         """
-        return UtralitcsAIAdapter(
+        return AsahiAIAdapter(
             LoadModel.loadBestYOLOModel(Path(IA_DIR)),
             UtralitcsAIRunConfiguration(
                 imagesDir = imagesDir,
                 stream = True,
                 confiance = 0.1,
-                iou = 0.45
+                iou = 0.45,
+                restrict_size = 512,
+                l=0.2
                 ),
             
             ResultsSaverInText(

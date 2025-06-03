@@ -1,14 +1,14 @@
 from typing import Any
 import threading
 
-from .IPredictableModelAdapter import IPredictableModelAdapter
+from IA.ultralitcs.AsahiAIAdapter import AsahiAIAdapter
 
 
 class AIRunner:
     """
     Realiza a predição com um modelo de predição fornecido pelo usuário.
     """
-    def __init__(self, model: IPredictableModelAdapter) -> None:
+    def __init__(self, model: AsahiAIAdapter) -> None:
         """
         Args:
             model (IPredictableModelAdapter): instância do modelo que deseja-se utilizar para fazer a predição

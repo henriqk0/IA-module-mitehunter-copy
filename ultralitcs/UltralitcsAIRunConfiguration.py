@@ -5,13 +5,13 @@ class UtralitcsAIRunConfiguration:
     Classe responsável por armazenar as configuração de execução da predição.
     """
     
-    def __init__(self, imagesDir: Path, stream: bool, confiance: float, iou: float) -> None:
+    def __init__(self, imagesDir: Path, stream: bool, confiance: float, iou: float, restrict_size: int=0, l:float=0) -> None:
         """
         Args:
             imagesDir (Path): diretório com as imagens que deseja-se predizer.
             stream (bool): Se verdadeiro, trata a fonte de entrada como um fluxo contínuo para previsões.
             confiance (float): margem de confiança aceitável para cada objeto identificado.
-            iou (float): Intersecção sobre Unidão desejada.
+            iou (float): Intersecção sobre União desejada.
         """
         assert(isinstance(imagesDir, (Path, PosixPath)))
         assert(type(confiance) == float)
@@ -23,6 +23,8 @@ class UtralitcsAIRunConfiguration:
         self.__stream: bool = stream
         self.__confiance: float = confiance
         self.__iou: float = iou
+        self.__restrict_size: int = restrict_size
+        self.__l: float = l
     
     @property
     def imagesDir(self) -> Path:
@@ -39,5 +41,17 @@ class UtralitcsAIRunConfiguration:
     @property
     def iou(self) -> float:
         return self.__iou
+    
+    @property
+    def restrict_size(self) -> int:
+        return self.__restrict_size
+    
+    @property
+    def l(self) -> float:
+        return self.__l
+
+    @property
+    def ls(self) -> float:
+        return self.__restrict_size * (4 - 3 * self.__l) + 1
         
         

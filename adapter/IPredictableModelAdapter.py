@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any
+# from ..ultralitcs.PredictionMetod import PredictionMetod
 
 
 class IPredictableModelAdapter(ABC):
@@ -9,13 +10,14 @@ class IPredictableModelAdapter(ABC):
     """
     def __init__(self) -> None:
         ABC.__init__(self)
+      
         
     @abstractmethod
     def predict(self) -> None:
         """
         Realiza a predição.
         """
-        pass
+        
     
     @abstractmethod
     def parallelPredict(self) -> None:

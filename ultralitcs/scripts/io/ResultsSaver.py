@@ -1,6 +1,10 @@
 from ultralytics.engine.results import Results
 from pathlib import Path
 from os import path, mkdir
+import numpy as np
+import re
+
+
 
 from ....adapter.IResultSaver import IResultsSaver
 
@@ -41,9 +45,21 @@ class ResultsSaverInText(IResultsSaver):
                 raise FileNotFoundError(f"Attention, the folder {self.__savePath} not exists.")
             mkdir(self.__savePath)
         
-        for resultIndex, result in enumerate(results): # executa para cada resultado enviado
+        for result in results:
+            # regex, e nao enumerate, para obter o índice, pois as imagens podem ser inseridas fora de ordem usando celery
+            match = re.search(r'image_(\d+)\.(jpeg|jpg|pgn)', result.path, re.IGNORECASE)
+            if match:
+                resultIndex = int(match.group(1))
+
             try:
-                result.save_txt(self.__savePath / f"{self.__saveFilePrefix}{resultIndex}.txt")  # Tenta salvar o resultado em um .txt
+                detections = result.boxes.data  
+
+                detections[:, 5] = detections[:, 5].int()  # Converte classe para int
+                detections_gt = detections[:, [5, 0, 1, 2, 3]]
+
+                output_path = self.__savePath / f"{self.__saveFilePrefix}{resultIndex}.txt"
+                np.savetxt(output_path, detections_gt.cpu().numpy(), fmt=['%d', '%.6f', '%.6f', '%.6f', '%.6f'])
+
             except Exception as e:
                 if(self.__debug): # se quiser debugar, imprime o codigo de erro passado
                     print(f"Error while try save results.\nResult index: {resultIndex}\nResult: {result}\nError: {e}")
